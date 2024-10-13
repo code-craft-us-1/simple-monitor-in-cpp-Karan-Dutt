@@ -20,8 +20,7 @@ void displayAlert(const std::string& message) {
     }
 }
 
-bool isTemperatureOk(float temperature)
-{
+bool isTemperatureOk(float temperature){
     if (temperature < MIN_TEMP || temperature > MAX_TEMP) 
     {
         displayAlert("Temperature is critical!");
@@ -30,8 +29,7 @@ bool isTemperatureOk(float temperature)
     return true;
 }
 
-bool isPulseRateOk(float pulseRate)
-{
+bool isPulseRateOk(float pulseRate){
     if (pulseRate < MIN_PULSE || pulseRate > MAX_PULSE)
     {
         displayAlert("Pulse Rate is out of range!");
@@ -40,8 +38,7 @@ bool isPulseRateOk(float pulseRate)
     return true;
 }
 
-bool isSpo2Ok(float spo2)
-{
+bool isSpo2Ok(float spo2){
     if (spo2 < MIN_SPO2)
     {
         displayAlert("Oxygen Saturation out of range!");
