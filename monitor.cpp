@@ -21,28 +21,24 @@ void displayAlert(const std::string& message) {
     }
 }
 
-bool isTemperatureOk(float temperature) {
-    if (temperature < MIN_TEMP || temperature > MAX_TEMP) {
-        displayAlert("Temperature is critical!");
+bool isVitalOk(float value, float minLimit, float maxLimit, const std::string& alertMessage) {
+    if (value < minLimit || value > maxLimit) {
+        displayAlert(alertMessage);
         return false;
     }
     return true;
+}
+
+bool isTemperatureOk(float temperature) {
+    return isVitalOk(temperature, MIN_TEMP, MAX_TEMP, "Temperature is critical!");
 }
 
 bool isPulseRateOk(float pulseRate) {
-    if (pulseRate < MIN_PULSE || pulseRate > MAX_PULSE) {
-        displayAlert("Pulse Rate is out of range!");
-        return false;
-    }
-    return true;
+    return isVitalOk(pulseRate, MIN_PULSE, MAX_PULSE, "Pulse Rate is out of range!");
 }
 
 bool isSpo2Ok(float spo2) {
-    if (spo2 < MIN_SPO2) {
-        displayAlert("Oxygen Saturation out of range!");
-        return false;
-    }
-    return true;
+    return isVitalOk(spo2, MIN_SPO2, 100.0f, "Oxygen Saturation out of range!");
 }
 
 // Main function to check all vitals
