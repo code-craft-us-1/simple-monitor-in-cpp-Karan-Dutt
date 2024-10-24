@@ -57,3 +57,38 @@ TEST(Monitor, VitalsCloseToThresholds) {
     ASSERT_TRUE(vitalsOk(95.1, 60.1, 90.1));
     ASSERT_TRUE(vitalsOk(101.9, 99.9, 90.0));
 }
+
+// Function to capture output from std::cout
+std::string captureOutput(std::function<void()> func) {
+    std::stringstream buffer;
+    std::streambuf* oldCoutBuffer = std::cout.rdbuf(buffer.rdbuf());
+
+    // Call the function to capture its output
+    func();
+
+    // Restore std::cout to its original buffer
+    std::cout.rdbuf(oldCoutBuffer);
+
+    return buffer.str();
+}
+
+TEST(Monitor, TemperatureBelowMinimumAlert) {
+    std::string output = captureOutput([&]() {
+        ASSERT_FALSE(vitalsOk(94.9, 70, 98));
+    });
+    ASSERT_EQ(output, "ALERT: Temperature is critical!\n");
+}
+
+TEST(Monitor, TemperatureAtMinimumAlert) {
+    std::string output = captureOutput([&]() {
+        ASSERT_TRUE(vitalsOk(95.0, 70, 98));
+    });
+    ASSERT_EQ(output, "ALERT: Warning: Approaching hypothermia\n");
+}
+
+TEST(Monitor, TemperatureAtMaximumAlert) {
+    std::string output = captureOutput([&]() {
+        ASSERT_TRUE(vitalsOk(102.0, 70, 98));
+    });
+    ASSERT_EQ(output, "ALERT: Warning: Approaching hyperthermia\n");
+}
