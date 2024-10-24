@@ -40,21 +40,33 @@ public:
           tolerance(tol) {}
 
     bool isOk(float value) const override {
-        const float toleranceAmount = (tolerance / 100.0f) * maxLimit;
-        const float lowerWarningThreshold = minLimit + toleranceAmount;  // Closer to min
-        const float upperWarningThreshold = maxLimit - toleranceAmount; 
+    if (!isInCriticalRange(value)) {
+        return false;
+    }
+    issueWarningIfNeeded(value);
+    return true;
+    }
 
-        if (value < minLimit || value > maxLimit) {
-            displayAlert(alertMessage);
-            return false;
-        }
+    private:
+    bool isInCriticalRange(float value) const {
+    if (value < minLimit || value > maxLimit) {
+        displayAlert(alertMessage);
+        return false;
+    }
+    return true;
+    }
+
+    void issueWarningIfNeeded(float value) const {
+    const float toleranceAmount = (tolerance / 100.0f) * maxLimit;
+    const float lowerWarningThreshold = minLimit + toleranceAmount;  // Closer to min
+    const float upperWarningThreshold = maxLimit - toleranceAmount;
+
         if (value >= minLimit && value <= lowerWarningThreshold) {
-            displayAlert(lowWarningMessage);
+            displayAlert(lowWarningMessage); // Approaching lower limit
         }
         if (value >= upperWarningThreshold && value <= maxLimit) {
-            displayAlert(highWarningMessage);
+            displayAlert(highWarningMessage); // Approaching upper limit
         }
-        return true;
     }
 };
 
