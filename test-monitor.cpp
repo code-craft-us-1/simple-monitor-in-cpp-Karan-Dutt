@@ -1,7 +1,7 @@
 #include "./monitor.h"
-#include <iostream>
-#include <string>
 #include "gtest/gtest.h"
+#include "iostream"
+#include "string"
 
 TEST(Monitor, TemperatureBelowMinimum) {
     ASSERT_FALSE(vitalsOk(94.9, 70, 98));

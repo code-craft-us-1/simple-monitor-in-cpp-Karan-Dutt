@@ -58,20 +58,20 @@ class Vital : public patientVitals {
 
     void issueWarningIfNeeded(float value) const {
     const float toleranceAmount = (tolerance / 100.0f) * maxLimit;
-    const float lowerWarningThreshold = minLimit + toleranceAmount;// Closer to min
+    const float lowerWarningThreshold = minLimit + toleranceAmount;  // Closer to min
     const float upperWarningThreshold = maxLimit - toleranceAmount;
         if (value >= minLimit && value <= lowerWarningThreshold) {
-            displayAlert(lowWarningMessage);  //Approaching lower limit
+            displayAlert(lowWarningMessage);  // Approaching lower limit
         }
         if (value >= upperWarningThreshold && value <= maxLimit) {
-            displayAlert(highWarningMessage);  //Approaching upper limit
+            displayAlert(highWarningMessage);  // Approaching upper limit
         }
     }
 };
 
 class Temperature : public Vital<Temperature> {
  public:
-    Temperature() : Vital(MIN_TEMP, MAX_TEMP, 
+    Temperature() : Vital(MIN_TEMP, MAX_TEMP,
                           "Temperature is critical!",
                           "Warning: Approaching hypothermia",
                           "Warning: Approaching hyperthermia") {}
@@ -79,7 +79,7 @@ class Temperature : public Vital<Temperature> {
 
 class PulseRate : public Vital<PulseRate> {
  public:
-    PulseRate() : Vital(MIN_PULSE, MAX_PULSE, 
+    PulseRate() : Vital(MIN_PULSE, MAX_PULSE,
                         "Pulse Rate is out of range!",
                         "Warning: Approaching bradycardia",
                         "Warning: Approaching tachycardia") {}
