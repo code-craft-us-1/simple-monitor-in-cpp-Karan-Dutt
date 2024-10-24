@@ -13,7 +13,7 @@ const float MIN_SPO2 = 90.0;
 
 
 class patientVitals {
-public:
+ public:
     virtual bool isOk(float value) const = 0;
     virtual void displayAlert(const std::string& message) const {
         std::cout << "ALERT: " << message << std::endl;
@@ -23,7 +23,7 @@ public:
 
 template<typename T>
 class Vital : public patientVitals {
-private:
+ private:
     float minLimit;
     float maxLimit;
     std::string alertMessage;
@@ -31,9 +31,9 @@ private:
     std::string highWarningMessage;
     float tolerance;  // 1.5% tolerance for early warning
 
-public:
-    Vital(float minL, float maxL, const std::string& alertMsg, 
-          const std::string& lowWarnMsg, const std::string& highWarnMsg, 
+ public:
+    Vital(float minL, float maxL, const std::string& alertMsg,
+        const std::string& lowWarnMsg, const std::string& highWarnMsg,
           float tol = 1.5f)
         : minLimit(minL), maxLimit(maxL), alertMessage(alertMsg),
           lowWarningMessage(lowWarnMsg), highWarningMessage(highWarnMsg),
@@ -47,7 +47,7 @@ public:
     return true;
     }
 
-    private:
+ private:
     bool isInCriticalRange(float value) const {
     if (value < minLimit || value > maxLimit) {
         displayAlert(alertMessage);
@@ -58,39 +58,38 @@ public:
 
     void issueWarningIfNeeded(float value) const {
     const float toleranceAmount = (tolerance / 100.0f) * maxLimit;
-    const float lowerWarningThreshold = minLimit + toleranceAmount;  // Closer to min
+    const float lowerWarningThreshold = minLimit + toleranceAmount;// Closer to min
     const float upperWarningThreshold = maxLimit - toleranceAmount;
-
         if (value >= minLimit && value <= lowerWarningThreshold) {
-            displayAlert(lowWarningMessage); // Approaching lower limit
+            displayAlert(lowWarningMessage);  //Approaching lower limit
         }
         if (value >= upperWarningThreshold && value <= maxLimit) {
-            displayAlert(highWarningMessage); // Approaching upper limit
+            displayAlert(highWarningMessage);  //Approaching upper limit
         }
     }
 };
 
 class Temperature : public Vital<Temperature> {
-public:
+ public:
     Temperature() : Vital(MIN_TEMP, MAX_TEMP, 
-                          "Temperature is critical!", 
-                          "Warning: Approaching hypothermia", 
+                          "Temperature is critical!",
+                          "Warning: Approaching hypothermia",
                           "Warning: Approaching hyperthermia") {}
 };
 
 class PulseRate : public Vital<PulseRate> {
-public:
+ public:
     PulseRate() : Vital(MIN_PULSE, MAX_PULSE, 
-                        "Pulse Rate is out of range!", 
-                        "Warning: Approaching bradycardia", 
+                        "Pulse Rate is out of range!",
+                        "Warning: Approaching bradycardia",
                         "Warning: Approaching tachycardia") {}
 };
 
 class SpO2 : public Vital<SpO2> {
-public:
-    SpO2() : Vital(MIN_SPO2, 100.0f, 
-                   "Oxygen Saturation is critical!", 
-                   "Warning: Approaching hypoxemia", 
+ public:
+    SpO2() : Vital(MIN_SPO2, 100.0f,
+                   "Oxygen Saturation is critical!",
+                   "Warning: Approaching hypoxemia",
                    "Warning: Approaching hyperoxia") {}
 };
 

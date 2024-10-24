@@ -1,5 +1,6 @@
 #include "./monitor.h"
-
+#include <iostream>
+#include <string>
 #include "gtest/gtest.h"
 
 TEST(Monitor, TemperatureBelowMinimum) {
